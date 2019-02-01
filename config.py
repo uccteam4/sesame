@@ -7,7 +7,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database - sqlLite for now
 SQLALCHEMY_DATABASE_URI = "sqlite:////" + os.path.join(BASE_DIR, "app.db")
-DATAVASE_CONNECT_OPTIONS = {}
+DATABASE_CONNECT_OPTIONS = {}
 
 # Application threads. A common general assumption is
 # using 2 per available processor cores - to handle
@@ -24,3 +24,5 @@ CSRF_SESSION_KEY = "secret"
 
 # Secret key for signing cookies
 SECRET_KEY = "secret"
+
+SQLALCHEMY_TRACK_MODIFICATIONS = False
