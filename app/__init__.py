@@ -11,10 +11,11 @@ def create_app():
     app.config.from_pyfile("../config.py")
 
     db.init_app(app)
-    with app.app_context():
-        db.create_all()
 
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
+
+    with app.app_context():
+        db.create_all()
 
     return app
