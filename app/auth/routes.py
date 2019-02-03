@@ -1,51 +1,33 @@
 from flask import Flask
-from app import db
-from models import User, Researcher, Admin
+from app import db, bcrypt, login_manager
+from models import User, Researcher
 from app.auth import auth
 
-@auth.route("/insertr")
-def insert():
-    r1 = Researcher(name="Pat", orcid="0001")
-    a1 = Admin(name="Tommy", position="Shell")
-    r2 = Researcher(name="Chris", orcid="0002")
-    a2 = Admin(name="Philip", position="supervisor")
-    r3 = Researcher(name="Rachel", orcid="0003")
-    db.session.add(r1)
-    db.session.add(a1)
-    db.session.add(r2)
-    db.session.add(a2)
-    db.session.add(r3)
-    db.session.commit()
-    return "successfully inserted!"
+from flask_login import UserMixin
+from flask_login import login_user, current_user, logout_user
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return user.query.get(int(user_id))
 
-@auth.route("/query")
-def query():
-    # us = Researcher.query.all()
-    # s = ""
-    # for u in us:
-    #     s += "Researcher: " + u.id + " " + u.first_name + " " + u.last_name + " " + u.email
+@auth.route("/login", methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        #Checks email instead of username
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password,form.password.data):
+            #If we decide to implement a remember me function
+            login_user(user)#, remember=form.remember.data)
+            return redirect(url_for('home'))
+        else:
+            flash('Login Unsuccesful. Please check e-mail and password')
+    return render_template('login.html',title='Login', form=form)
 
-    # us = Admin.query.all()
-    # for u in us:
-    #     s += "Admin: " + u.id + " " + u.first_name + " " + u.last_name + " " + u.
-    
-    # es = Employee.query.all()
-    # s = ""
-    # for e in es:
-    #     s += "Employee: " + e.id + " " + e.name + e.title + "\n"
-
-    es = User.query.all()
-    s = ""
-    for e in es:
-        s += "User: " + str(e.id) + " " + e.account_type
-        if e.account_type == "researcher":
-            if e.name and e.orcid:
-                s += " " + e.name + " " + e.orcid
-        elif (e.account_type == "admin"):   
-            if e.name and e.position:
-                s += " " + e.name + " " + e.position
-        s += "<br \>"
-
-    return s
+@auth.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))

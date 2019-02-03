@@ -3,7 +3,9 @@ __pycache__/
 *.pyc
 
     # Linux swap files
-    *.swp
+*.swp
 
     #  Vscode settings
-    .vscode
+.vscode
+
+.venv
