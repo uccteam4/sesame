@@ -1,6 +1,7 @@
 # Byte-compiled files
 __pycache__/
 *.pyc
+*.py.swp
 
 # Linux swap files
 *.swp
