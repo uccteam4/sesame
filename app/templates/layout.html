@@ -1,0 +1,28 @@
+{% macro render_field(field, placeholder="") %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+{% endmacro %}
+
+<!doctype html>
+<html>
+    <head>
+        <title>Sesame</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='base.css')}}">
+    </head>
+
+    <body>
+        {% block body %}{% endblock %}
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+    </body>
+</html>

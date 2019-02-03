@@ -20,6 +20,8 @@ def create_app():
 
     from app.auth import auth
     app.register_blueprint(auth, url_prefix="/auth/")
+    from app.profile import profile
+    app.register_blueprint(profile)
 
     with app.app_context():
         db.create_all()

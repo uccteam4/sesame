@@ -2,10 +2,14 @@
 __pycache__/
 *.pyc
 
-    # Linux swap files
+# Linux swap files
 *.swp
 
-    #  Vscode settings
+#  Vscode settings
 .vscode
 
+# Virtual envoiroment directory
 .venv
+
+# Database instance
+app.db

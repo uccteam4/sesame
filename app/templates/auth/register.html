@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% macro render_form(form) %}
+{% for field in form %}
+{% if field.name != "csrf_token" %}
+{{ field.label}}
+{{ render_field(field) }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% block body %}
+
+<h1>Register</h1>
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+
+<form method="POST"  accept-charset="UTF-8" role="form">
+    {{ form.csrf_token }}
+    {{ render_form(form) }}
+    <input type="submit" value="register"/>
+</form>
+
+{% endblock %}
