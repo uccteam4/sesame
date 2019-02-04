@@ -3,6 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from app import db
 from app.auth.models import User
 
+class Admin(db.Model):
+
+    __tablename__ = "admins"
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
+
 class Researcher(db.Model):
 
     __tablename__ = "researchers"
