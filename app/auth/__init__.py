@@ -3,6 +3,6 @@ from app import login_manager
 
 auth = Blueprint("auth", __name__)
 
-import routes
-import models
-import forms
+import app.auth.routes
+import app.auth.models
+import app.auth.forms

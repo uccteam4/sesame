@@ -3,7 +3,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 
 # Import the extensions used here
 from app import db, bcrypt, login_manager
-from forms import LoginForm, RegistrationForm
+from app.auth.forms import LoginForm, RegistrationForm
 from flask_login import UserMixin, current_user, login_user, logout_user
 
 # Import auth blueprint
@@ -11,7 +11,7 @@ from app.auth import auth
 
 # Import the Models used
 from app.profile.models import Researcher
-from models import User
+from app.profile.models import User
 
 
 @login_manager.user_loader
@@ -31,8 +31,13 @@ def register():
             db.session.commit()
             
             user = User.query.filter_by(email=form.email.data).first()
-            researcher = Researcher(user_id=user.id, first_name=form.first_name.data, last_name=form.last_name.data, job_title=form.job_title.data, prefix=form.prefix.data, suffix=form.suffix.data, phone=form.phone.data, phone_ext=form.phone_ext.data, orcid=form.orcid.data)
+            researcher = Researcher(user_id=user.id, first_name=form.first_name.data, last_name=form.last_name.data,
+                                     job_title=form.job_title.data, prefix=form.prefix.data, suffix=form.suffix.data, 
+                                     phone=form.phone.data, phone_ext=form.phone_ext.data, orcid=form.orcid.data)
             db.session.add(researcher)
+            education = Education(user_id=user.id, degree=None, field_of_study=None, institution=None,
+                                    location=None,degree_award_year=None)
+            db.session.add(education)
             db.session.commit()
 
             flash("Your account has been created. You can now login")
@@ -54,8 +59,6 @@ def login():
             return redirect(url_for('home'))
         else:
             flash('Login Unsuccesful. Please check e-mail and password')
-    else:
-        flash("Invalid details supplied")
     return render_template('auth/login.html',title='Login', form=form)
 
 @auth.route("/logout")
