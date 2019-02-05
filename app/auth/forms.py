@@ -19,4 +19,3 @@ class RegistrationForm(FlaskForm):
     phone = IntegerField("Phone")
     phone_ext = IntegerField("Phone Extension")
     orcid = StringField("Orcid")
-

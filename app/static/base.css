@@ -9,6 +9,11 @@ body *{
     margin: 0.8em;
 }
 
-input {
+input, textarea {
     display: block;
+}
+
+textarea{
+    width: 50%;
+    height: 100px;
 }

@@ -3,6 +3,15 @@
     {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
 {% endmacro %}
 
+{% macro render_form(form) %}
+{% for field in form %}
+{% if field.name != "csrf_token" %}
+{{ field.label}}
+{{ render_field(field) }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
 <!doctype html>
 <html>
     <head>
