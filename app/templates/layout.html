@@ -8,21 +8,25 @@
     <head>
         <title>Sesame</title>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='base.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css')}}">
     </head>
 
     <body>
-        {% block body %}{% endblock %}
+        <div class="container-fluid">
 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
+            {% block body %}{% endblock %}
 
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+
+        </div>
     </body>
 </html>
