@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+	<h1>Home Page</h1>
+		
+	<nav>
+		<ul>
+		{% for item in navs %}
+			<li><a href="/{{item.lower().strip()}}">{{item}}</a></li>
+		{%endfor%}
+		</ul>
+	</nav>
+
+{% endblock %}
