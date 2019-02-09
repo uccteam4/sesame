@@ -19,6 +19,16 @@ from app.profile.models import User
 def load_user(user_id):
     return user.query.get(int(user_id))
 
+
+@auth.route("/")
+auth.route("/home")
+def home():
+    if current_user.is_authenticated:
+        navs = ["Teams","Log Out", "Query"]
+    else:
+        navs = ["Login", "Register"]
+    return render_template("auth/home.html", navs=navs)
+
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
@@ -84,5 +94,11 @@ def call_for_proposals():
             msg.body = "testing"
             msg.html = "<b>testing</b>"
             mail.send(msg)
-
     return render_template("auth/proposals.html", title="Call For Proposals", form=form)
+
+@app.route("/teams")
+def team_form():
+    form = TeamForm()
+    return render_template('auth/team_form.html',title="Enter Team", form=form)
+
+
