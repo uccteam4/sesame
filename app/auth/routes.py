@@ -2,9 +2,10 @@
 from flask import Flask, render_template, flash, redirect, url_for
 
 # Import the extensions used here
-from app import db, bcrypt, login_manager
-from app.auth.forms import LoginForm, RegistrationForm
+from app import db, bcrypt, login_manager, mail
+from app.auth.forms import LoginForm, RegistrationForm, CallForProposalsForm
 from flask_login import UserMixin, current_user, login_user, logout_user
+from flask_mail import Message
 
 # Import auth blueprint
 from app.auth import auth
@@ -29,19 +30,21 @@ def register():
             user = User(form.email.data, password, "RESEARCHER")
             db.session.add(user)
             db.session.commit()
-            
+
             user = User.query.filter_by(email=form.email.data).first()
             researcher = Researcher(user_id=user.id, first_name=form.first_name.data, last_name=form.last_name.data,
-                                     job_title=form.job_title.data, prefix=form.prefix.data, suffix=form.suffix.data, 
+                                     job_title=form.job_title.data, prefix=form.prefix.data, suffix=form.suffix.data,
                                      phone=form.phone.data, phone_ext=form.phone_ext.data, orcid=form.orcid.data)
             db.session.add(researcher)
-            education = Education(user_id=user.id, degree=None, field_of_study=None, institution=None,
-                                    location=None,degree_award_year=None)
-            db.session.add(education)
+            # education = Education(user_id=user.id, degree=None, field_of_study=None, institution=None,
+            #                         location=None,degree_award_year=None)
+            # db.session.add(education)
             db.session.commit()
 
             flash("Your account has been created. You can now login")
             return redirect(url_for("auth.login"))
+        else:
+            flash("An account already exists with this email address. Please login.")
     return render_template("auth/register.html", form=form)
 
 @auth.route("/login", methods=['GET', 'POST'])
@@ -70,3 +73,16 @@ def logout():
 def query():
     users = User.query.all()
     return str(len(users))
+
+@auth.route("/call-for-proposals", methods=['GET', 'POST'])
+def call_for_proposals():
+    form = CallForProposalsForm()
+    if form.validate_on_submit():
+        emails = db.session.query(User.email)
+        for email, in emails:
+            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
+            msg.body = "testing"
+            msg.html = "<b>testing</b>"
+            mail.send(msg)
+
+    return render_template("auth/proposals.html", title="Call For Proposals", form=form)
