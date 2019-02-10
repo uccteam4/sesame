@@ -3,7 +3,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 
 # Import the extensions used here
 from app import db, bcrypt, login_manager, mail
-from app.auth.forms import LoginForm, RegistrationForm, CallForProposalsForm
+from app.auth.forms import LoginForm, RegistrationForm
 from flask_login import UserMixin, current_user, login_user, logout_user
 from flask_mail import Message
 
@@ -74,16 +74,3 @@ def logout():
 def query():
     users = User.query.all()
     return str(len(users))
-
-@auth.route("/call-for-proposals", methods=['GET', 'POST'])
-def call_for_proposals():
-    form = CallForProposalsForm()
-    if form.validate_on_submit():
-        emails = db.session.query(User.email)
-        for email, in emails:
-            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-            msg.body = "testing"
-            msg.html = "<b>testing</b>"
-            mail.send(msg)
-
-    return render_template("auth/proposals.html", title="Call For Proposals", form=form)

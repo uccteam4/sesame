@@ -2,11 +2,7 @@
 DEBUG = True
 
 # Define the application directory
-import os            flash("Your account has been created. You can now login")
-            return redirect(url_for("auth.login"))
-            flash("Your account has been created. You can now login")
-            return redirect(url_for("auth.login"))
-
+import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database - sqlLite for now

@@ -37,6 +37,13 @@ def make_call():
             db.session.add(call)
             db.session.commit()
 
+            emails = db.session.query(User.email)
+            for email, in emails:
+                msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
+                msg.body = "testing"
+                msg.html = "<b>testing</b>"
+                mail.send(msg)
+
             flash("Call for funding has been published")
             return render_template("call_system/make_call.html", form=form) 
         else:
