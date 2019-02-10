@@ -2,11 +2,12 @@
 #but can change things easily enough
 #Testing is still to be done
 from flask import Flask 
+from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flaskblog import routes
+from flaskblog import routes, db
 from flask_login import LoginManager
 from flask_login import UserMixin
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -31,6 +32,16 @@ def login():
     return render_template('login.html',title='Login', form=form)
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
+    flash('Logout successful')
     return redirect(url_for('home'))
+
+
+@app.route("/delete", methods=['POST'])
+@login_required
+def delete():
+    user = User.query.filter_by(email=form.email.data).first()
+    cd.session.delete(current_user)
+    cd.session.commit()
