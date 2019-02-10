@@ -8,6 +8,7 @@ __pycache__/
 
 #  Vscode settings
 .vscode
+.vscode/**
 
 # Virtual envoiroment directory
 .venv

@@ -11,13 +11,13 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher
+from app.profile.models import Researcher, Education
 from app.profile.models import User
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return user.query.get(int(user_id))
+    return User.query.filter_by(id=user_id).first()
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
@@ -59,7 +59,7 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('home'))
+            return render_template("auth/login.html", form=form)
         else:
             flash('Login Unsuccesful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
@@ -67,7 +67,8 @@ def login():
 @auth.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    flash("You have been logged out")
+    return redirect(url_for('auth.login'))
 
 @auth.route("/query")
 def query():
