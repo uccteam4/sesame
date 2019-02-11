@@ -19,3 +19,9 @@ class RegistrationForm(FlaskForm):
     phone = IntegerField("Phone")
     phone_ext = IntegerField("Phone Extension")
     orcid = StringField("Orcid")
+
+#temporary class for a temp call for proposals form
+#used to test email notification functionality
+class CallForProposalsForm(FlaskForm):
+    proposal_name = StringField("Proposal Name", [InputRequired()])
+    

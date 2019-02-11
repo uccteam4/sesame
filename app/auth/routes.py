@@ -3,7 +3,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 
 # Import the extensions used here
 from app import db, bcrypt, login_manager, mail
-from app.auth.forms import LoginForm, RegistrationForm
+from app.auth.forms import LoginForm, RegistrationForm, CallForProposalsForm
 from flask_login import UserMixin, current_user, login_user, logout_user
 from flask_mail import Message
 
@@ -11,13 +11,13 @@ from flask_mail import Message
 from app.auth import auth
 
 # Import the Models used
-from app.profile.models import Researcher, Education
+from app.profile.models import Researcher
 from app.profile.models import User
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.filter_by(id=user_id).first()
+    return user.query.get(int(user_id))
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
@@ -59,18 +59,30 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return render_template("auth/login.html", form=form)
+            return redirect(url_for('home'))
         else:
-            flash('Login Unsuccesful. Please check e-mail and password')
+            flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
 
 @auth.route("/logout")
 def logout():
     logout_user()
-    flash("You have been logged out")
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('home'))
 
 @auth.route("/query")
 def query():
     users = User.query.all()
     return str(len(users))
+
+@auth.route("/call-for-proposals", methods=['GET', 'POST'])
+def call_for_proposals():
+    form = CallForProposalsForm()
+    if form.validate_on_submit():
+        emails = db.session.query(User.email)
+        for email, in emails:
+            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
+            msg.body = "testing"
+            msg.html = "<b>testing</b>"
+            mail.send(msg)
+
+    return render_template("auth/proposals.html", title="Call For Proposals", form=form)
