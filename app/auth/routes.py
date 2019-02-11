@@ -88,4 +88,10 @@ def query():
 @app.route("/teams")
 def team_form():
     form = TeamForm()
-    return render_template('auth/team_form.html',title="Enter Team", form=form)
+    if form.validate_on_submit():
+        team = Team(form.start_date.data,form.end_date.data,form.name.data,form.position.data,form.grant_number.data)
+        db.session.add(team)
+        db.session.commit()
+        flash("Your team member has been added!")
+    members = Team.query.all() #Need to query for the researchers team, not all members     
+    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
