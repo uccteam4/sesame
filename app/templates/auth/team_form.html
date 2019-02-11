@@ -32,13 +32,13 @@
 		</form>
 	</div>
 		
-		
-		<table>
-			<tr>
-				<th>Start Date</th><th>Departure Date</th><th>Name</th><th><Position</th><th>Primary Attribute</th>
-			</tr>
-				{% for member in members %}
-				<tr><td>{{ member[0] }}</td><td>{{ member[1] }}</td><td>{{ member[2] }}</td><td>{{ member3] }}</td><td>{{ member[4] }}</td></tr>	
-				{% endfor %}
-		</table>
+	<h1>Your Team</h1>
+	<table>
+		<tr>
+			<th>Start Date</th><th>Departure Date</th><th>Name</th><th><Position</th><th>Primary Attribute</th>
+		</tr>
+			{% for member in members %}
+			<tr><td>{{ member[0] }}</td><td>{{ member[1] }}</td><td>{{ member[2] }}</td><td>{{ member3] }}</td><td>{{ member[4] }}</td></tr>	
+			{% endfor %}
+	</table>
 {% endblock body %}
