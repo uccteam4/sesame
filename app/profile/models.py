@@ -30,7 +30,7 @@ class Education(db.Model):
     location = db.Column(db.String, nullable=True)
     degree_award_year = db.Column(db.String, nullable=True)
     
-    class Team(db.Model):
+class Team(db.Model):
 
     __tablename__ = 'team_members'
 
