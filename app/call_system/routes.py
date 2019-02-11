@@ -2,15 +2,17 @@
 from flask import Flask, render_template, flash, redirect, url_for
 
 # Import the extensions used here
-from app import db, login_manager
+from app import db, login_manager, mail
 import app.call_system.forms
 from flask_login import current_user, login_required
+from flask_mail import Message
 
 # Import call_system blueprint
 from app.call_system import call_system
 
 # Import the Models used
 from app.call_system.models import Call
+from app.auth.models import User
 
 # Import the forms
 from app.call_system.forms import CallForm
@@ -39,7 +41,7 @@ def make_call():
 
             emails = db.session.query(User.email)
             for email, in emails:
-                msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
+                msg = Message("Call for Proposal", recipients=[email])
                 msg.body = "testing"
                 msg.html = "<b>testing</b>"
                 mail.send(msg)
