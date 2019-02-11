@@ -25,6 +25,8 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/auth/")
     from app.profile import profile
     app.register_blueprint(profile)
+    from app.call_system import call_system
+    app.register_blueprint(call_system, url_prefix="/calls/")
 
     with app.app_context():
         db.create_all()

@@ -17,7 +17,7 @@ from app.profile.models import User
 
 @login_manager.user_loader
 def load_user(user_id):
-    return user.query.get(int(user_id))
+    return User.query.get(int(user_id))
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
@@ -50,7 +50,7 @@ def register():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return "you are logged in"#redirect(url_for(''))
     form = LoginForm()
     if form.validate_on_submit():
         #Checks email instead of username
@@ -59,7 +59,7 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('home'))
+            return redirect(url_for('auth.login'))
         else:
             flash('Login Unsuccessful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
@@ -67,7 +67,7 @@ def login():
 @auth.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('auth.login'))
 
 @auth.route("/query")
 def query():

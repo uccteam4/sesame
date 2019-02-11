@@ -12,7 +12,7 @@ class Call(db.Model):
     # Meta information about the call
     id = db.Column(db.Integer, primary_key=True)
     date_published = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    published_by = db.Column(db.Integer, db.ForeignKey("admins.user_id"))
+    published_by = db.Column(db.Integer)#, db.ForeignKey("users.user_id"))
 
     # Actual content of the call
     information = db.Column(db.String)

@@ -2,15 +2,24 @@
 
 {% block body %}
 
-<h1>Make Call for Proposal</h1>
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
+<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
+    <div class="card white darken-1">
+        <div class="card-content">
+            <span class="card-title center-align">Make Call</span>
+                {% if error %}
+                    <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %}
 
-<form method="POST" role="form">
-    {{ form.csrf_token }}
-    {{ render_form(form) }}
-    <input type="submit" value="Publish Call" />
+<form method="POST" id="call-form" role="form">
+  {{ form.csrf_token }}
+  {{ render_field(form.information, placeholder="Information") }}
+  {{ render_field(form.target_group, placeholder="Target Group") }}
+  {{ render_field(form.proposal_template, placeholder="Proposal template") }}
+  {{ render_field(form.deadline, placeholder="Deadline") }}
+  <a class="waves-effect waves-light btn" onclick="document.getElementById('call-form').submit();">Publish Call</a>
 </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
