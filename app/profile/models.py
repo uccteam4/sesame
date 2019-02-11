@@ -30,17 +30,35 @@ class Education(db.Model):
     location = db.Column(db.String, nullable=True)
     degree_award_year = db.Column(db.String, nullable=True)
     
-class Team(db.Model):
+class TeamMembers(db.Model):
 
     __tablename__ = 'team_members'
 
-    start_date= db.Column(db.DateTime,nullable=False)  ##When inserting, datetime.date i think, not .datetime
-    end_date = db.Column(db.DateTime,nullable=False)   ##
+    start_date= db.Column(db.DateTime,nullable=False)  
+    end_date = db.Column(db.DateTime,nullable=False)  
     name = db.Column(db.String(20),nullable=False)
     position = db.Column(db.String(80),nullable=False)
     grant_number = db.Column(db.Integer,nullable=False)
-    id = db.Column(db.Integer, primary_key=True) #Primary Key needed
+    id = db.Column(db.Integer, primary_key=True)
 
     def __init__(self, start_date, end_date, name, position, grant_number):
         self.start_date = start_date
         self.end_date = end_date
+        self.name = name
+        self.position = position
+        self.grant_number = grant_number
+        
+        
+class Teams(db.Model):
+
+    __tablename__ = 'teams'
+
+    researcher = db.Column(db.String(20),nullable=False)
+    grant_number = db.Column(db.Integer,nullable=False)
+    team = db.Column(db.TeamMembers, nullable=False)
+    id = db.Column(db.Integer, primary_key=True) #Primary Key needed
+
+    def __init__(self, researcher, grant_number, team):
+        self.reseacher = researcher
+        self.team = team
+        self.grant_number = grant_number     
