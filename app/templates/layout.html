@@ -15,6 +15,28 @@
     </head>
 
     <body>
+        <nav>
+                <div class="nav-wrapper teal">
+                    <div class="container">
+                        <a href="#" class="brand-logo">Sesame</a>
+                        <ul id="nav-mobile" class="right hide-on-med-and-down">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#"">Profile</a></li>
+                            <li><a href="#"">Login</a></li>
+                        </ul>
+                    </div>
+                    <a href="#" data-target="mobile-links" class="sidenav-trigger">
+                        <i class="material-icons">menu</i>
+                    </a>
+                </div>
+            </nav>
+    
+            <!-- Mobile sidenav -->
+            <ul class="sidenav" id="mobile-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#"">Profile</a></li>
+                <li><a href="#"">Login</a></li>
+            </ul>
         <div class="container-fluid">
 
             {% block body %}{% endblock %}
@@ -30,5 +52,8 @@
             {% endwith %}
 
         </div>
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/custom.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/materialize.js')}}"></script>
     </body>
 </html>
