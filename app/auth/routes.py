@@ -3,7 +3,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 
 # Import the extensions used here
 from app import db, bcrypt, login_manager, mail
-from app.auth.forms import LoginForm, RegistrationForm, CallForProposalsForm
+from app.auth.forms import LoginForm, RegistrationForm, TeamForm
 from flask_login import UserMixin, current_user, login_user, logout_user
 from flask_mail import Message
 
@@ -12,7 +12,7 @@ from app.auth import auth
 
 # Import the Models used
 from app.profile.models import Researcher
-from app.profile.models import User
+from app.profile.models import User, Team
 
 
 @login_manager.user_loader
@@ -20,7 +20,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @auth.route("/")
-auth.route("/home")
+@auth.route("/home")
 def home():
     if current_user.is_authenticated:
         navs = ["Teams", "Query", "Log Out",]
@@ -99,7 +99,7 @@ def call_for_proposals():
 
 
 
-@app.route("/teams")
+@auth.route("/teams")
 def team_form():
     form = TeamForm()
     if form.validate_on_submit():
