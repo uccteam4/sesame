@@ -19,6 +19,16 @@ from app.profile.models import User
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@auth.route("/")
+auth.route("/home")
+def home():
+    if current_user.is_authenticated:
+        navs = ["Teams", "Query", "Log Out",]
+    else:
+        navs = ["Login", "Register"]
+    return render_template("auth/home.html", navs=navs)
+
+
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
@@ -86,3 +96,16 @@ def call_for_proposals():
             mail.send(msg)
 
     return render_template("auth/proposals.html", title="Call For Proposals", form=form)
+
+
+
+@app.route("/teams")
+def team_form():
+    form = TeamForm()
+    if form.validate_on_submit():
+        team = Team(form.start_date.data,form.end_date.data,form.name.data,form.position.data,form.grant_number.data)
+        db.session.add(team)
+        db.session.commit()
+        flash("Your team member has been added!")
+    members = Team.query.all() #Need to query for the researchers team, not all members     
+    return render_template('auth/team_form.html',title="Enter Team", form=form, members=members)
