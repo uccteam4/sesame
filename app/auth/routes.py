@@ -69,7 +69,7 @@ def login():
             #If we decide to implement a remember me function
             login_user(user)#, remember=form.remember.data)
             flash("You are now logged in")
-            return redirect(url_for('home'))
+            return render_template("auth/login.html", form=form)
         else:
             flash('Login Unsuccesful. Please check e-mail and password')
     return render_template('auth/login.html',title='Login', form=form)
@@ -77,28 +77,15 @@ def login():
 @auth.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    flash("You have been logged out")
+    return redirect(url_for('auth.login'))
 
 @auth.route("/query")
 def query():
     users = User.query.all()
     return str(len(users))
 
-@auth.route("/call-for-proposals", methods=['GET', 'POST'])
-def call_for_proposals():
-    form = CallForProposalsForm()
-    if form.validate_on_submit():
-        emails = db.session.query(User.email)
-        for email, in emails:
-            msg = Message(form.proposal_name.data + " - Call for Proposal", recipients=[email])
-            msg.body = "testing"
-            msg.html = "<b>testing</b>"
-            mail.send(msg)
-    return render_template("auth/proposals.html", title="Call For Proposals", form=form)
-
 @app.route("/teams")
 def team_form():
     form = TeamForm()
     return render_template('auth/team_form.html',title="Enter Team", form=form)
-
-
